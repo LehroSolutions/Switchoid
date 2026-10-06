@@ -1,0 +1,69 @@
+name: Windows build and verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.3.14'
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Prepare pinned media engines
+        run: bun run media:prepare
+      - name: Verify production build
+        run: bun run build
+      - name: Verify native media conversions
+        run: bun run test
+      - name: Verify Electron UI
+        run: bun run test:ui
+      - name: Build Windows x64 installer
+        run: bun run dist
+      - name: Verify packaged application
+        shell: pwsh
+        run: |
+          $env:SWITCHOID_EXECUTABLE = Join-Path $PWD 'release\win-unpacked\Switchoid.exe'
+          bun run test:ui
+      - name: Checksum installer
+        shell: pwsh
+        run: |
+          Get-ChildItem release -Filter 'Switchoid-Setup-*.exe' | ForEach-Object {
+            $hash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)" | Set-Content -LiteralPath (Join-Path $_.DirectoryName "$($_.Name).sha256") -Encoding ascii
+          }
+      - name: Upload installer and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: Switchoid-Windows-x64
+          path: |
+            release/Switchoid-Setup-*.exe
+            release/*.sha256
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload screenshots and UI results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Electron-verification
+          path: artifacts/
+          if-no-files-found: ignore

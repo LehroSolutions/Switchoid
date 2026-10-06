@@ -1,0 +1,22 @@
+{
+  // Root config for tooling that runs sources directly (Bun, editors).
+  // Project builds use tsconfig.node.json / tsconfig.web.json via references.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["src/shared/*"],
+      "@main/*": ["src/main/*"],
+      "@renderer/*": ["src/renderer/src/*"]
+    }
+  },
+  "include": ["src/**/*", "scripts/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+}

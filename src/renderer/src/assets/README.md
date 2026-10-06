@@ -1,0 +1,13 @@
+# Artwork
+
+Generated using the built-in image generation tool from the supplied `D:/Switchoid/Switchoid.png` reference. The original reference is unchanged. Source PNGs are retained here; the application loads the WebP versions, totaling approximately 598 KB. Run `node scripts/encode-assets.mjs` to reproduce the WebP encoding.
+
+The landscape and media artwork are reconstructions, not pixel-identical extractions. All controls, labels, the logo, upload ring, queue, and history are live HTML/CSS/SVG.
+
+## Landscape prompt
+
+Use case: precise-object-edit. Asset type: background wallpaper for a working Electron application. Input image is the edit target. Reconstruct ONLY the spectacular underlying fantasy landscape from this exact reference: deep navy storm clouds upper left, pink peach sunset right, tall jagged alpine rock spires left, distant mountains across middle, tranquil reflective lake bottom, dark detailed forest and rocks at left edge. Preserve the reference landscape's composition, photorealistic cinematic digital matte-painting detail, blue/cyan/pink palette, lighting and perspective as closely as possible. Remove ALL UI completely: no lettering, no logos, no panels, no cards, no thumbnails, no outlines, no circular portal or ring, no icons, no window border. Fill all removed UI areas with coherent continuation of the landscape. Top 40 percent is moody dark blue open sky, horizon around 58 percent. Full bleed 1536x1024 landscape wallpaper. This is an image asset, NOT an app screenshot.
+
+## Media artwork prompt
+
+Asset type: illustration sprite sheet for three media category cards in a working application. Create a wide 1536x512 image split into EXACTLY THREE EQUAL square columns with no gaps, no text anywhere, no labels, no UI or card containers. All three have the same plain deep navy #101a33 background. LEFT THIRD: a beautiful floating fanned stack of glossy photographs with white edges, foreground photograph of bright blue alpine lake and snowcapped mountains, tilted slightly counterclockwise, cyan and lavender rim lighting. MIDDLE THIRD: a floating horizontal film strip with sprocket holes along both vertical edges, showing an astonishing cinematic alien mountain landscape at sunset, peach planet and blue moon in sky; luminous lavender and blue edges. RIGHT THIRD: a sculptural flowing luminous audio waveform with many parallel smooth neon pink purple and cyan lines, two high peaks and troughs, like an elegant silk ribbon made of light. Cinematic polished 3D rendering, vibrant colors, highly detailed. Each subject fully within its own third with 7 percent margin. These are decorative assets, no letters and no buttons.

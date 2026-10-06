@@ -1,0 +1,100 @@
+{
+  "name": "switchoid",
+  "version": "0.1.0",
+  "description": "Convert Anything. Anywhere. A local-first Electron converter for images, video and audio.",
+  "private": true,
+  "type": "module",
+  "main": "./out/main/index.js",
+  "author": { "name": "Lehro Solutions", "url": "https://github.com/LehroSolutions" },
+  "homepage": "https://github.com/LehroSolutions/Switchoid",
+  "repository": { "type": "git", "url": "https://github.com/LehroSolutions/Switchoid.git" },
+  "bugs": { "url": "https://github.com/LehroSolutions/Switchoid/issues" },
+  "packageManager": "bun@1.3.14",
+  "engines": { "node": ">=24" },
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "build": "bun run icons && bun run typecheck && electron-vite build",
+    "icons": "node scripts/prepare-icons.mjs",
+    "media:prepare": "node --use-system-ca scripts/prepare-media.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "bun run scripts/smoke.mjs",
+    "test:ui": "node scripts/ui-smoke.mjs",
+    "docs:build": "bun run scripts/build-docs.mjs",
+    "package": "bun run media:prepare && bun run build && electron-builder --win --x64 --dir --publish never",
+    "dist": "bun run media:prepare && bun run build && electron-builder --win --x64 --publish never"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^38.8.6",
+    "electron-builder": "^26.17.0",
+    "electron-vite": "^5.0.0",
+    "extract-zip": "2.0.1",
+    "lucide-react": "^1.52.0",
+    "marked": "^18.0.14",
+    "playwright": "1.62.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.0",
+    "vite": "^7.3.6",
+    "zustand": "^5.0.15"
+  },
+  "build": {
+    "appId": "com.lehrosolutions.switchoid",
+    "productName": "Switchoid",
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      { "from": "build/icon.png", "to": "icon.png" },
+      { "from": "LICENSE", "to": "licenses/Switchoid-LICENSE.txt" },
+      { "from": "THIRD_PARTY_NOTICES.md", "to": "licenses/THIRD_PARTY_NOTICES.md" },
+      { "from": "resources/ffmpeg", "to": "licenses/ffmpeg" },
+      {
+        "from": "resources/bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "asar": true,
+    "asarUnpack": ["node_modules/@img/**/*", "node_modules/sharp/**/*"],
+    "npmRebuild": false,
+    "win": {
+      "icon": "build/icon.ico",
+      "signExecutable": false,
+      "artifactName": "Switchoid-Setup-${version}-${arch}.${ext}",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Switchoid",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "Switchoid",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}
