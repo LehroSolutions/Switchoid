@@ -49,6 +49,14 @@ function size(p) {
 const sig = () => new AbortController().signal
 const noop = () => {}
 
+async function outputStreams(path) {
+  const { ffprobePath } = await ffmpegStatus()
+  if (!ffprobePath) throw new Error('FFprobe is required to verify encoded outputs')
+  return JSON.parse(execFileSync(ffprobePath, ['-v', 'error', '-show_streams', '-of', 'json', path], {
+    windowsHide: true, encoding: 'utf8', timeout: 30000
+  })).streams
+}
+
 function meta(path) {
   return {
     path,
@@ -242,6 +250,14 @@ console.log('\nVIDEO')
     const m = meta(src)
     m.probe = { durationSec: 3, width: 640, height: 480, hasAudio: true, hasVideo: true }
 
+    for (const [format, videoCodec, audioCodec] of [['mov', 'h264', 'aac'], ['mkv', 'h264', 'aac'], ['avi', 'mpeg4', 'mp3']]) {
+      const r = await convertVideo(src, out, { ...optionsForKind('video'), format }, m, noop, sig())
+      const streams = await outputStreams(r.outPath)
+      check(`mp4 to ${format} contains video and audio`,
+        streams.some(stream => stream.codec_type === 'video' && stream.codec_name === videoCodec) &&
+        streams.some(stream => stream.codec_type === 'audio' && stream.codec_name === audioCodec))
+    }
+
     {
       const seen = []
       const r = await convertVideo(
@@ -319,7 +335,7 @@ console.log('\nAUDIO')
   } else {
     const am = meta(asrc)
     am.probe = { durationSec: 3, hasAudio: true, hasVideo: false }
-    for (const fmt of ['mp3', 'wav', 'flac', 'ogg']) {
+    for (const [fmt, codec] of [['mp3', 'mp3'], ['wav', 'pcm_s16le'], ['flac', 'flac'], ['ogg', 'vorbis'], ['aac', 'aac'], ['m4a', 'aac'], ['opus', 'opus']]) {
       const r = await convertAudio(
         asrc,
         out,
@@ -328,7 +344,9 @@ console.log('\nAUDIO')
         noop,
         sig()
       )
-      check(`mp3 â†’ ${fmt}`, size(r.outPath) > 0, `${size(r.outPath)} bytes`)
+      const streams = await outputStreams(r.outPath)
+      check(`mp3 to ${fmt}`, size(r.outPath) > 0 && streams.some(stream => stream.codec_type === 'audio' && stream.codec_name === codec &&
+        (fmt !== 'opus' || Number(stream.sample_rate) === 48000)), `${size(r.outPath)} bytes`)
     }
   }
 }

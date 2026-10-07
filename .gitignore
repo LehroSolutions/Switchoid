@@ -1,18 +1,76 @@
+# Dependencies and generated application / documentation output
 node_modules/
-out/
-release/
-resources/bin/
-resources/ffmpeg/
-artifacts/
+/out/
+/dist/
+/release/
+/site/
+
+# Downloaded media engines, matching source archives, and build caches
+/resources/bin/
+/resources/ffmpeg/
+/resources/.media-stage-*/
 .cache/
+.bun/
+.vite/
 *.tsbuildinfo
+
+# Local verification output and Electron profiles
+/artifacts/
+/coverage/
+/playwright-report/
+/test-results/
+/blob-report/
+/user-data/
+/userdata/
+/User Data/
+*.dmp
+
+# Private marketing captures, supplied audio, renders, and review evidence
+/marketing/switchoid-ad/assets/
+/marketing/switchoid-ad/exports/
+/marketing/switchoid-ad/review/
+
+# Credentials, local environment overrides, and signing material
 .env
 .env.*
 !.env.example
+!.env.*.example
+*.local
 *.pfx
 *.p12
-build/brand-preview.png
-site/
+*.pem
+*.key
+*.keystore
+*.jks
+.npmrc.local
+
+# Installers and native build output; source SVG/PNG/ICO assets stay versioned
+*.exe
+*.msi
+*.msix
+*.appx
+*.blockmap
+*.asar
+*.dll
+*.node
+/build/brand-preview.png
+
+# Local supplied design reference
+/Switchoid.png
+
+# Logs, temporary files, and editor / OS state
 .logs/
-.DS_Store
 *.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+/tmp/
+/temp/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini

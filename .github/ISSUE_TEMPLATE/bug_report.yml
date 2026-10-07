@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a reproducible application problem using non-sensitive media.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For security issues, follow [SECURITY.md](https://github.com/LehroSolutions/Switchoid/blob/main/SECURITY.md). Redact private filenames, local paths, and credentials. Use synthetic or shareable media.
+  - type: input
+    id: version
+    attributes:
+      label: Switchoid version or commit
+      placeholder: 0.1.0 or a source commit
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11, x64
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include input/output format, conversion options, and whether this is an installed or source build.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized logs or screenshots
+      description: Optional. Only attach media you have permission to share publicly.

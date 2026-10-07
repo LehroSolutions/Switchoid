@@ -58,7 +58,8 @@ export async function convertAudio(
   }
   if (filters.length) args.push('-af', filters.join(','))
 
-  args.push('-ac', String(opts.channels), '-ar', String(opts.sampleRate), '-vn')
+  const sampleRate = opts.format === 'opus' ? 48000 : opts.sampleRate
+  args.push('-ac', String(opts.channels), '-ar', String(sampleRate), '-vn')
   args.push('-progress', 'pipe:1', '-nostats', outPath)
 
   const total =

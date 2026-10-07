@@ -1,0 +1,17 @@
+name: Feature request
+description: Describe a conversion or workflow improvement.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed behavior
+      description: Include example formats or workflows and any alternatives you tried.
+    validations:
+      required: true
